@@ -21,6 +21,7 @@ Le dices a Claude "monta mi proyecto con SDD" y te entrevista un tema a la vez: 
 | **Pruebas automáticas por endpoint** (FastAPI) | Schemathesis prueba el contrato OpenAPI de **todos** los endpoints con datos válidos, inválidos y extremos. Además, toda ruta exige auth salvo las declaradas públicas, se rechazan credenciales falsas y no se filtran trazas. Un endpoint nuevo queda cubierto en cuanto existe. |
 | **Trazabilidad y documentación viva** | Un script falla si un criterio de aceptación no tiene test. `docs/trazabilidad.md` y `docs/api/openapi.json` se regeneran en cada commit y CI falla si quedan desactualizados. |
 | **pre-commit y CI** | Gitleaks, Semgrep, Trivy, pip-audit, tipos, cobertura ≥ 90 % de las líneas nuevas (diff-cover). |
+| **Una rama por feature** | La spec aprobada abre `feat/NNN-nombre` desde `main` limpio. Un commit por avance lógico, nunca en rojo. Antes de integrar se trae `main` a la rama y se vuelve a probar. El merge a `main` (PR o `merge --no-ff` local) pide tu OK explícito; `merge --squash` se bloquea. |
 | **Proporcionalidad** | Cambio chico: el agente principal solo, sin subagentes. Mediano o crítico: los 4 roles. Ante la duda, el nivel mayor. |
 
 Paquetes opcionales: **dev** (comandos `/nueva-feature`, `/implementar`, `/revisar`, `/verificar`, `/pr`... y skills de método) e **ia** (datos, ML, LLMs, RAG, evals). La instalación ligera ocupa ~1,000 tokens de contexto por sesión; la completa, ~7,000.
@@ -79,7 +80,7 @@ Luego construye cada feature con `/implementar spec/features/001-...` y agrega n
 ## Probado
 
 - Claude Code real: la skill completa generada en un proyecto de ML y en una API multi-tenant. Bloqueos de push a main, `rm -rf` y `.env` confirmados en vivo, igual que el guardrail que impide debilitar tests.
-- `scripts/test-hooks.sh`: 49 de 49 casos.
+- `scripts/test-hooks.sh`: 57 de 57 casos.
 - Pruebas por endpoint: con tres errores plantados (ruta sin auth, división entre cero, traza filtrada), las tres los detectan sin código específico.
 - Sin probar: Gitleaks y Semgrep en pre-commit, y los workflows corriendo en GitHub Actions.
 

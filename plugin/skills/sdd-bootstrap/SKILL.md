@@ -259,6 +259,12 @@ del arnés con sus defaults:
 - Paquetes: base + dev [+ ia] · Nivel: ligero · CI en GitHub: sí ·
   Ciclo `@claude` en GitHub (revisión y auto-arreglo de PRs, gasta tokens
   de API): no.
+- Flujo git: una rama por feature (`feat/NNN-nombre`), un commit por
+  avance lógico, merge a `main` solo con OK explícito. Modo: **con remoto**
+  (PR en GitHub) si el repo tiene `origin` en GitHub, si no **local**
+  (`git merge --no-ff`). Detéctalo con `git remote -v` y confírmalo aquí.
+  En la sección «Una rama por feature» del `CLAUDE.md` deja solo el modo
+  elegido.
 
 Pregunta explícitamente si procede con la generación de archivos antes de
 crear nada, y si quiere cambiar algún default del arnés.
@@ -400,7 +406,8 @@ usuario en vez de simplemente seguir sin documentar.
 - Pendientes manuales, en una lista corta: proteger `main` en GitHub (PR
   obligatorio y CI requerido); el primer commit del andamiaje se hace en
   una rama o con `SKIP=no-commit-to-branch git commit ...`, porque
-  pre-commit bloquea commits directos a `main`; y, si activó el ciclo en
+  pre-commit bloquea commits directos a `main` (el hook `git-flow-guard`
+  te pedirá confirmarlo una vez); y, si activó el ciclo en
   GitHub, el secreto `ANTHROPIC_API_KEY` o `/install-github-app`.
 - **No empieces a implementar código de ninguna feature todavía** — el
   trabajo de esta skill termina en el andamiaje, no en la construcción.

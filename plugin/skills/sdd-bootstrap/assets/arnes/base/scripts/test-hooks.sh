@@ -94,6 +94,32 @@ expect_ask "cambiar valor (test sin commit)" '{"tool_name":"Edit","tool_input":{
 expect_ask "agregar un assert"     '{"tool_name":"Edit","tool_input":{"file_path":"tests/test_x.py","old_string":"    assert a == 1","new_string":"    assert a == 1\n    assert b == 2"}}' pasa
 expect_ask "editar código normal"  '{"tool_name":"Edit","tool_input":{"file_path":"src/app.py","old_string":"assert x","new_string":"pass"}}' pasa
 
+echo "git-flow-guard.sh"
+# Repo temporal en main y otro en una rama feat/, para probar según la rama actual.
+TMPG=$(mktemp -d)
+git -C "$TMPG" init -q -b main 2>/dev/null || { git -C "$TMPG" init -q; git -C "$TMPG" checkout -q -b main; }
+git -C "$TMPG" -c user.name=t -c user.email=t@t commit -q --allow-empty -m init
+TMPF=$(mktemp -d); git clone -q "$TMPG" "$TMPF" 2>/dev/null; git -C "$TMPF" checkout -q -b feat/001-x
+# expect_flujo <descripción> <cwd> <comando> <pide|bloquea|pasa>
+expect_flujo() {
+  local out code got
+  out=$(jq -cn --arg c "$3" --arg d "$2" '{tool_name:"Bash", tool_input:{command:$c}, cwd:$d}' |
+        "$HOOKS/git-flow-guard.sh" 2>/dev/null); code=$?
+  got="pasa"; [ $code -eq 2 ] && got="bloquea"
+  printf '%s' "$out" | grep -q '"permissionDecision": *"ask"' && got="pide"
+  if [ "$got" = "$4" ]; then PASS=$((PASS+1)); printf '  ok     %-32s %-8s %s\n' git-flow-guard.sh "$4" "$1"
+  else FAIL=$((FAIL+1)); printf '  FALLA  %-32s quería %-8s obtuvo %-8s %s\n' git-flow-guard.sh "$4" "$got" "$1"; fi
+}
+expect_flujo "merge de feature estando en main"  "$TMPG" "git merge --no-ff feat/001-x"                    pide
+expect_flujo "checkout main && merge feature"     "$TMPF" "git checkout main && git merge --no-ff feat/001-x" pide
+expect_flujo "commit directo en main"            "$TMPG" "git commit -m 'feat: algo'"                      pide
+expect_flujo "merge --squash"                    "$TMPF" "git merge --squash feat/002-y"                   bloquea
+expect_flujo "traer main a la rama"              "$TMPF" "git merge main"                                  pasa
+expect_flujo "commit en la rama del feature"     "$TMPF" "git commit -m 'feat: algo'"                      pasa
+expect_flujo "abrir rama desde main"             "$TMPG" "git checkout -b feat/002-y && git commit -m x"   pasa
+expect_flujo "merge --abort en main"             "$TMPG" "git merge --abort"                               pasa
+rm -rf "$TMPG" "$TMPF" 2>/dev/null
+
 echo
 echo "Resultado: $PASS ok, $FAIL fallas"
 [ $FAIL -eq 0 ]

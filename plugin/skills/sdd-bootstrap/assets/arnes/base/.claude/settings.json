@@ -58,6 +58,11 @@
           },
           {
             "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/git-flow-guard.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/credential-exfil-guard.sh",
             "timeout": 5
           },
