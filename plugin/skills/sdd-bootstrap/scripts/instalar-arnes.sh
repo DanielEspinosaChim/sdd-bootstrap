@@ -24,6 +24,22 @@ set -euo pipefail
 
 SKILL="$(cd "$(dirname "$0")/.." && pwd)"
 A="$SKILL/assets/arnes"
+# La versión para la app de Claude trae los paquetes dev e ia empaquetados en un .tar.gz
+# (la app limita los skills a 200 archivos). Se extraen a una carpeta temporal.
+if [ ! -d "$A/base/.claude" ] && [ -f "$SKILL/assets/arnes.tar.gz" ]; then
+  # La app de Claude descarta archivos ocultos (.claude, .github...) al subir la skill:
+  # en esa versión todo el arnés viene dentro de arnes.tar.gz.
+  TMPA=$(mktemp -d)
+  trap 'rm -rf "$TMPA"' EXIT
+  tar -xzf "$SKILL/assets/arnes.tar.gz" -C "$TMPA"
+  A="$TMPA/arnes"
+elif [ ! -d "$A/dev" ] && [ -f "$SKILL/assets/arnes-paquetes.tar.gz" ]; then
+  TMPA=$(mktemp -d)
+  trap 'rm -rf "$TMPA"' EXIT
+  cp -R "$A" "$TMPA/arnes"
+  tar -xzf "$SKILL/assets/arnes-paquetes.tar.gz" -C "$TMPA/arnes"
+  A="$TMPA/arnes"
+fi
 DEST=""; STACK="python"; PAQ="dev"; NIVEL="ligero"; CI="si"; CGH="no"; LLM="no"; API=""; APPREF=""
 while [ $# -gt 0 ]; do
   case "$1" in
