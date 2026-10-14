@@ -1,0 +1,21 @@
+{
+  "name": "sdd-bootstrap",
+  "version": "1.0.0",
+  "description": "Spec-Driven Development para Claude Code: entrevista guiada que genera constitución, specs, CLAUDE.md, subagentes y docs vivos, e instala un arnés de seguridad y calidad que ahorra tokens (hooks, pruebas automáticas por endpoint, trazabilidad spec → test, CI).",
+  "keywords": [
+    "spec-driven-development",
+    "sdd",
+    "guardrails",
+    "hooks",
+    "testing",
+    "security",
+    "fastapi",
+    "ml"
+  ],
+  "author": {
+    "name": "Daniel Espinosa Chim",
+    "url": "https://github.com/DanielEspinosaChim"
+  },
+  "repository": "https://github.com/DanielEspinosaChim/sdd-bootstrap",
+  "license": "MIT"
+}

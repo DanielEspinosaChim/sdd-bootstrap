@@ -1,0 +1,41 @@
+# Configuración de ruff. Los límites viven aquí para que la máquina los haga cumplir,
+# no en el CLAUDE.md. Si ya tienes [tool.ruff] en pyproject.toml, este archivo gana.
+line-length = 100
+target-version = "py312"
+extend-exclude = ["data", "notebooks/scratch", ".trash"]
+
+[lint]
+select = [
+  "E", "F",      # errores básicos de pycodestyle y pyflakes
+  "I",           # orden de imports
+  "N",           # nombres
+  "UP",          # sintaxis moderna
+  "B",           # bugs probables (bugbear)
+  "A",           # no sombrear builtins
+  "C4",          # comprensiones
+  "C90",         # complejidad ciclomática
+  "S",           # seguridad (bandit): eval, pickle, SQL armado a mano, subprocess con shell...
+  "PT",          # estilo de pytest
+  "SIM",         # simplificaciones
+  "TID",         # imports
+  "PL",          # pylint: argumentos, ramas, sentencias
+  "NPY",         # numpy
+  "PD",          # pandas
+  "PERF",        # rendimiento
+  "RUF",
+]
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.pylint]
+max-args = 6
+max-statements = 50
+max-branches = 12
+
+[lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004", "S311"]   # assert, números mágicos y random están bien en tests
+"notebooks/**" = ["E402", "T201"]

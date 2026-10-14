@@ -1,0 +1,16 @@
+{
+  "_comentario": "La API key de Context7 NUNCA va aquí: se toma de la variable de entorno CONTEXT7_API_KEY de cada persona. Si ya tienes Context7 a nivel usuario (claude mcp add --scope user), borra esta entrada. Renombra a .mcp.json para activarlos. Claude Code te pedirá aprobar cada servidor (enableAllProjectMcpServers está en false). Cada MCP es código de terceros con acceso a tu sesión: agrega solo los que uses y de fuentes conocidas.",
+  "mcpServers": {
+    "context7": {
+      "_para": "Documentación actualizada de librerías (evita APIs inventadas o viejas).",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@4.4.1"],
+      "env": { "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY:-}" }
+    },
+    "playwright": {
+      "_para": "Abrir y probar tu app web en un navegador real (tests E2E, capturas).",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83"]
+    }
+  }
+}

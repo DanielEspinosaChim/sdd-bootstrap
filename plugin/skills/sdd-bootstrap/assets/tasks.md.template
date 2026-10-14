@@ -1,0 +1,52 @@
+# Tasks — [Nombre de la feature]
+
+Checklist de tareas atómicas y verificables. Marcar `[x]` solo cuando esté
+implementado Y verificado, no solo escrito. Cada tarea va con su test
+primero: se escribe el test, se confirma que falla, y luego se implementa.
+
+## Backend
+
+- [ ] [tarea atómica 1] — test: `[ruta/test]`
+- [ ] [tarea atómica 2] — test: `[ruta/test]`
+
+## Frontend
+
+- [ ] [tarea atómica 1] — test: `[ruta/test]`
+- [ ] [tarea atómica 2]
+
+## Tests unitarios
+
+- [ ] [test 1]
+- [ ] [test 2]
+
+## Tests de integración
+
+- [ ] [test 1]
+
+## Tests de seguridad
+
+- [ ] Validación de inputs cubierta con test
+- [ ] Control de acceso cubierto con test (usuario sin permiso no puede acceder)
+- [ ] Test de aislamiento multi-tenant (si aplica a este proyecto)
+- [ ] Revisar contra `spec/features/000-seguridad-transversal/spec.md`
+      antes de mergear
+
+## E2E
+
+- [ ] [flujo end-to-end principal de la feature]
+
+## Verificación final
+
+- [ ] Comandos de "Terminado significa" de `CLAUDE.md` en verde, con la salida pegada
+- [ ] `python3 scripts/trazabilidad.py --check` pasa (cada criterio `C[NNN]-n` tiene su test)
+- [ ] Si la feature agrega endpoints: pasan `tests/test_contrato_api.py` y `tests/test_seguridad_endpoints.py`; rutas públicas declaradas a propósito en `tests/arnes_config.py`
+- [ ] `docs/trazabilidad.md` y `docs/api/openapi.json` regenerados (pre-commit lo hace solo)
+- [ ] Revisión según el nivel de riesgo de `spec.md` (chico: propia, sin subagentes · mediano y crítico: `tester` + `auditor-seguridad`, sin P0 ni criterios sin probar)
+- [ ] Nota de sesión en `docs/`
+
+---
+
+*Al completar una tarea, márcala con `[x]`. Si surge una tarea nueva no
+prevista, agrégala al final de su sección correspondiente en vez de
+modificar las ya existentes. Si una tarea queda parcial, déjala en `[ ]`
+con una nota `<!-- parcial: falta X -->`.*

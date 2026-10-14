@@ -1,0 +1,44 @@
+# Spec — [Nombre de la feature]
+
+## Qué hace
+
+[2-3 frases describiendo la funcionalidad.]
+
+## Nivel de riesgo
+
+[Chico / Mediano / Crítico] — [por qué, en una línea. Crítico si toca auth,
+permisos, pagos, datos personales, multi-tenant, migraciones, subida de
+archivos o ML/LLM a producción. Define cuánta revisión lleva; ver
+"Proporcionalidad" en CLAUDE.md.]
+
+## Módulos que toca
+
+- [ ] Backend
+- [ ] Frontend
+- [ ] Datos / ML / LLM
+
+## Depende de
+
+- [feature previa que debe existir, o "Ninguna" si es la primera]
+
+## Fuera de alcance
+
+- [qué NO incluye esta feature explícitamente]
+
+## Criterios de aceptación
+
+Verificables y no ambiguos — cada uno debe poder probarse con un test.
+El número de cada criterio es su ID: el criterio 3 de la feature 001 es
+`C001-3`, y el test que lo prueba lleva ese ID en su docstring o nombre.
+Formato: **Dado** [contexto], **cuando** [acción], **entonces** [resultado
+observable], con un ejemplo concreto.
+
+1. [criterio 1] — Ejemplo: entrada `...` → resultado `...`
+2. [criterio 2]
+3. [criterio 3]
+4. [criterio 4 — un caso de error: entrada inválida → error esperado]
+5. [criterio 5 — un caso borde: vacío, límite o duplicado]
+
+<!-- Agregar más criterios según la complejidad real de la feature. -->
+<!-- Si la feature usa un modelo o un LLM, agrega criterios de calidad medibles:
+     métrica ≥ umbral en un dataset o set de evals fijo (ver .claude/rules/llm-apps.md). -->

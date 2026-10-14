@@ -1,0 +1,72 @@
+# Revisión automática de cada PR: una revisión general y una de seguridad.
+# Basado en los ejemplos oficiales de anthropics/claude-code-action y
+# anthropics/claude-code-security-review (ambos MIT) y en ChrisWiles/claude-code-showcase (MIT).
+# Nota: la acción de seguridad NO está blindada contra prompt injection. Úsala en PRs de confianza
+# y activa "Require approval for all external contributors" en Settings → Actions.
+name: Claude Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  revision:
+    name: Revisión de código
+    if: github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          track_progress: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            BASE: ${{ github.event.pull_request.base.ref }}
+
+            Revisa este PR con los estándares del repositorio:
+            1. Lee CLAUDE.md, .claude/rules/revision.md y spec/features/000-seguridad-transversal/spec.md.
+            2. Si el diff toca código de datos, modelos o LLMs, aplica también (si existen) .claude/rules/ml-datos.md,
+               .claude/rules/llm-apps.md y el checklist de .claude/agents/mle-reviewer.md.
+            3. Ve los cambios con `gh pr diff ${{ github.event.pull_request.number }}`.
+            4. Revisa en este orden: correctitud y casos borde, tests (¿fallarían si el código se rompe?),
+               seguridad, alcance (¿cambia algo que la descripción no menciona?), simplicidad.
+
+            Reporta cada hallazgo con archivo:línea, severidad (CRÍTICA / ALTA / MEDIA / BAJA) y confianza.
+            Usa comentarios en línea para problemas concretos y un comentario general con el veredicto:
+            BLOQUEAR si hay algo CRÍTICO, APROBAR CON CAMBIOS si hay ALTOS, APROBAR si no.
+            No elogies; si todo está bien, dilo en una línea.
+          claude_args: |
+            --max-turns 25
+            --allowedTools "Read,Glob,Grep,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(git diff:*),Bash(git log:*)"
+
+  seguridad:
+    name: Revisión de seguridad
+    if: github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - uses: anthropics/claude-code-security-review@main
+        with:
+          comment-pr: true
+          claude-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          exclude-directories: data,notebooks,.trash

@@ -1,0 +1,47 @@
+# Plan — [Nombre de la feature]
+
+## Enfoque técnico
+
+[Descripción del enfoque elegido y por qué, en 2-4 frases.]
+
+## Archivos a crear/modificar
+
+- `[ruta exacta del archivo]` — [qué se crea o modifica ahí]
+- `[ruta exacta del archivo]` — [...]
+
+## Endpoints
+
+| Método | Path | Descripción |
+|---|---|---|
+| [GET/POST/PUT/DELETE] | `/[ruta]` | [qué hace] |
+
+## Modelo de datos
+
+| Campo | Tipo | Notas |
+|---|---|---|
+| [campo] | [tipo] | [ej. requerido, único, índice] |
+
+## Flujo técnico paso a paso
+
+1. [paso 1]
+2. [paso 2]
+3. [paso 3]
+
+## Verificación por criterio
+
+Cada criterio de aceptación de `spec.md` con el test que lo demuestra.
+
+| Criterio | Test | Tipo |
+|---|---|---|
+| C[NNN]-1 | `[ruta/test::nombre]` (docstring con `C[NNN]-1`) | unitario / integración / E2E |
+| C[NNN]-2 | | |
+
+Los endpoints nuevos ya quedan cubiertos por las pruebas automáticas de
+contrato y seguridad (`tests/test_contrato_api.py`,
+`tests/test_seguridad_endpoints.py`); aquí solo van los tests de negocio.
+
+## Consideraciones de seguridad específicas de esta feature
+
+[Además del checklist transversal en 000-seguridad-transversal, cualquier
+punto específico de esta feature — ej. si maneja archivos, pagos, datos
+sensibles, o si pasa datos externos a un LLM.]

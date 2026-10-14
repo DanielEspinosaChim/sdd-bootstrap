@@ -1,0 +1,14 @@
+{
+  "name": "sdd-bootstrap",
+  "description": "Spec-Driven Development + arnés de seguridad y calidad para Claude Code",
+  "owner": {
+    "name": "Daniel Espinosa Chim"
+  },
+  "plugins": [
+    {
+      "name": "sdd-bootstrap",
+      "source": "./plugin",
+      "description": "Entrevista SDD, scaffold completo y arnés de seguridad y calidad que ahorra tokens"
+    }
+  ]
+}
